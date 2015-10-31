@@ -7,6 +7,8 @@ import           Paths_tritium (getDataFileName)
 
 data GameState = MainMenu
 
+type Button = GameObject ()
+
 type TritiumAction a = IOGame () () GameState () a
 
 loadImage :: (FilePath, InvList) -> IO (FilePath, InvList)
