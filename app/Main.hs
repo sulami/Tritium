@@ -4,8 +4,8 @@ import           Control.Monad.State (execStateT, liftIO)
 import           System.Exit (exitSuccess)
 
 import qualified SFML.Graphics.Color as COL
-import           SFML.Graphics.Types (RenderWindow)
 import qualified SFML.Graphics.RenderWindow as RW
+import           SFML.Graphics.Types (RenderWindow)
 import           SFML.Window.Event (SFEvent (..))
 import           SFML.Window.VideoMode (VideoMode (..))
 import           SFML.Window.Window (WindowStyle (..))
@@ -36,7 +36,8 @@ coreLoop window = do
 handleEvent :: RenderWindow -> SFEvent -> GameM ()
 handleEvent window event = do
   case event of
-    SFEvtClosed -> do liftIO $ RW.close window
+    SFEvtClosed -> do debugP "Close event"
+                      liftIO $ RW.close window
                       liftIO $ RW.destroy window
                       liftIO $ exitSuccess
     _           -> return ()
