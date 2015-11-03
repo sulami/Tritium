@@ -1,8 +1,9 @@
 module Main where
 
+import           SFML.Graphics.RenderWindow (createRenderWindow)
 import           SFML.Window.Types (Window)
 import           SFML.Window.VideoMode (VideoMode (..))
-import           SFML.Window.Window (WindowStyle (..), createWindow)
+import           SFML.Window.Window (WindowStyle (..))
 
 import           Tritium.Import
 import           Tritium.UI
@@ -13,6 +14,6 @@ main = do
       title = "Tritium"
       style = [SFTitlebar, SFClose]
       cnxst = Nothing
-  createWindow vmode title style cnxst
+  createRenderWindow vmode title style cnxst
   return ()
 
