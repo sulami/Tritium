@@ -2,7 +2,11 @@ module Tritium.Import where
 
 import           Control.Monad.State (StateT, liftIO)
 
-data GameState = MainMenu
+import           SFML.System.Clock (Clock)
+
+data GameState = GameState
+  { frameClock :: !Clock
+  }
 
 type GameM a = StateT GameState IO a
 
