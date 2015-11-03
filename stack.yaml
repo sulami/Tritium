@@ -2,10 +2,7 @@ flags: {}
 packages:
 - '.'
 extra-deps:
-- FunGEn-1.0
-- GLURaw-1.5.0.2
-- GLUT-2.7.0.3
-- ObjectName-1.1.0.0
-- OpenGL-2.13.1.0
-- OpenGLRaw-2.6.0.0
-resolver: lts-3.11
+- SFML-0.2.0.0
+resolver: lts-3.12
+ghc-options:
+  SFML: -fsimpl-tick-factor=10000
