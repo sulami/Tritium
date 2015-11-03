@@ -12,12 +12,12 @@ category:            Games
 build-type:          Simple
 -- extra-source-files:
 cabal-version:       >=1.10
-data-files:          res/*.bmp
+-- data-files:          res/*.png
 
 library
   hs-source-dirs:      src
   exposed-modules:     Tritium.Import
-                     , Tritium.Menu
+                     , Tritium.UI
   other-modules:       Paths_tritium
   build-depends:       base >= 4.7 && < 5
                      , SFML
