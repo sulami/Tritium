@@ -6,12 +6,13 @@ import           System.Exit (exitSuccess)
 import qualified SFML.Graphics.Color as COL
 import qualified SFML.Graphics.RenderWindow as RW
 import           SFML.Graphics.Types (RenderWindow)
-import           SFML.System.Clock (restartClock)
-import           SFML.Window.Event (SFEvent (..))
+import           SFML.System.Clock (createClock, restartClock)
+import           SFML.Window.Event (SFEvent (SFEvtClosed))
 import           SFML.Window.VideoMode (VideoMode (..))
 import           SFML.Window.Window (WindowStyle (..))
 
 import           Tritium.Import
+import           Tritium.UI
 
 main :: IO ()
 main = do
@@ -42,4 +43,9 @@ coreLoop window = do
       screen state frameTime event
   liftIO $ RW.display window
   coreLoop window
+
+defaultGameState :: IO GameState
+defaultGameState = do
+  frameClock <- createClock
+  return $ GameState frameClock mainMenu
 
