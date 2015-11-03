@@ -1,5 +1,6 @@
 module Main where
 
+import           Control.Monad.State (execStateT, liftIO)
 import           System.Exit (exitSuccess)
 
 import qualified SFML.Graphics.Color as COL
@@ -19,23 +20,24 @@ main = do
       style = [SFTitlebar, SFClose]
       cnxst = Nothing
   window <- RW.createRenderWindow vmode title style cnxst
-  coreLoop window
+  execStateT (coreLoop window) MainMenu
+  exitSuccess
 
-coreLoop :: RenderWindow -> IO ()
+coreLoop :: RenderWindow -> GameM ()
 coreLoop window = do
-  RW.clearRenderWindow window COL.black
-  event <- RW.pollEvent window
+  liftIO $ RW.clearRenderWindow window COL.black
+  event <- liftIO $ RW.pollEvent window
   case event of
     Just ev -> handleEvent window ev
     Nothing -> return ()
-  RW.display window
+  liftIO $ RW.display window
   coreLoop window
 
-handleEvent :: RenderWindow -> SFEvent -> IO ()
+handleEvent :: RenderWindow -> SFEvent -> GameM ()
 handleEvent window event = do
   case event of
-    SFEvtClosed -> do RW.close window
-                      RW.destroy window
-                      exitSuccess
+    SFEvtClosed -> do liftIO $ RW.close window
+                      liftIO $ RW.destroy window
+                      liftIO $ exitSuccess
     _           -> return ()
 
