@@ -12,7 +12,6 @@ import           SFML.Window.VideoMode (VideoMode (..))
 import           SFML.Window.Window (WindowStyle (..))
 
 import           Tritium.Import
-import           Tritium.UI
 
 main :: IO ()
 main = do
@@ -30,24 +29,17 @@ coreLoop window = do
   liftIO $ RW.clearRenderWindow window COL.black
   event <- liftIO $ RW.pollEvent window
   case event of
-    Just ev -> handleEvent window ev
-    Nothing -> return ()
-  step window
+    Just SFEvtClosed -> do
+      debugP "Received window close event, terminating"
+      liftIO $ do
+        RW.close window
+        RW.destroy window
+        exitSuccess
+    _                -> do
+      state <- get
+      frameTime <- liftIO . restartClock $ frameClock state
+      -- debugP . (++ " FPS") . show . (1000000 `div`) $ frameTime
+      screen state frameTime event
   liftIO $ RW.display window
   coreLoop window
-
-handleEvent :: RenderWindow -> SFEvent -> GameM ()
-handleEvent window event = do
-  case event of
-    SFEvtClosed -> do debugP "Close event"
-                      liftIO $ RW.close window
-                      liftIO $ RW.destroy window
-                      liftIO $ exitSuccess
-    _           -> return ()
-
-step :: RenderWindow -> GameM ()
-step window = do
-  state <- get
-  frameTime <- liftIO . restartClock $ frameClock state
-  return ()
 
