@@ -1,12 +1,12 @@
 module Main where
 
-import           Control.Monad.State (execStateT, get, liftIO, put)
+import           Control.Monad.State (execStateT, get, liftIO)
 import           System.Exit (exitSuccess)
 
 import qualified SFML.Graphics.Color as COL
 import qualified SFML.Graphics.RenderWindow as RW
 import           SFML.Graphics.Types (RenderWindow)
-import           SFML.System.Clock (createClock, restartClock)
+import           SFML.System.Clock (restartClock)
 import           SFML.Window.Event (SFEvent (..))
 import           SFML.Window.VideoMode (VideoMode (..))
 import           SFML.Window.Window (WindowStyle (..))
@@ -21,8 +21,8 @@ main = do
       style = [SFTitlebar, SFClose]
       cnxst = Nothing
   window <- RW.createRenderWindow vmode title style cnxst
-  frameClock <- liftIO createClock
-  execStateT (coreLoop window) $ GameState frameClock
+  startingState <- defaultGameState
+  execStateT (coreLoop window) startingState
   exitSuccess
 
 coreLoop :: RenderWindow -> GameM ()
@@ -49,4 +49,5 @@ step :: RenderWindow -> GameM ()
 step window = do
   state <- get
   frameTime <- liftIO . restartClock $ frameClock state
+  return ()
 
