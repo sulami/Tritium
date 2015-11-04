@@ -5,10 +5,13 @@ module Tritium.UI (
 import           Control.Monad.State (get, liftIO, modify, put)
 import           Data.Maybe (fromJust)
 
-import           Control.Lens ((^.), (|>), set)
+import           Control.Lens ((^.), (|>), both, over, set, view)
 import           SFML.Graphics.Font (FontException (..), fontFromFile)
+import           SFML.Graphics.Rect (FloatRect (..))
 import qualified SFML.Graphics.Text as T
+import           SFML.Graphics.Transformable (Transformable, setPosition)
 import           SFML.Graphics.Types (Font (..), Text (..))
+import qualified SFML.System.Vector2 as V2
 
 import           Paths_tritium (getDataFileName)
 import           Tritium.Import
@@ -29,8 +32,15 @@ newText name size str = do
   case text of
     Left (T.TextException msg) -> liftIO $ errorP msg
     Right txt                  -> do
-      liftIO $ do T.setTextStringU txt str
+      liftIO $ do T.setTextString txt str
                   T.setTextFont txt font
                   T.setTextCharacterSize txt size
       modify $ \s -> set drawables (s^.drawables |> (DText txt)) s
+
+centerText :: Text -> GameM ()
+centerText txt = do
+  windowDimensions <- windowSize
+  FloatRect _ _ ow oh <- liftIO $ T.getTextGlobalBounds txt
+  let (x,y) = over both ((/ 2) . fromIntegral) windowDimensions
+  liftIO . setPosition txt $ V2.Vec2f (x-ow/2) (y-oh/2)
 
