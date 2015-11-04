@@ -3,7 +3,6 @@ module Tritium.UI (
 ) where
 
 import           Control.Monad.State (get, liftIO, modify, put)
-import           Data.Maybe (fromJust)
 
 import           Control.Lens ((^.), (|>), both, over, set, view)
 import           SFML.Graphics.Font (FontException (..), fontFromFile)
@@ -27,7 +26,7 @@ loadFont name = do
 
 newText :: String -> Int -> String -> GameM (Maybe Text)
 newText name size str = do
-  font <- liftIO $ fromJust <$> loadFont name
+  Just font <- liftIO $ loadFont name
   text <- liftIO $ T.createText
   case text of
     Left (T.TextException msg) -> do liftIO $ errorP msg
