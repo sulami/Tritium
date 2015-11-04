@@ -3,6 +3,7 @@ module Main where
 import           Control.Monad.State (execStateT, get, liftIO)
 import           System.Exit (exitSuccess)
 
+import           Control.Lens ((^.))
 import qualified SFML.Graphics.Color as COL
 import qualified SFML.Graphics.RenderWindow as RW
 import           SFML.Graphics.Types (RenderWindow)
@@ -38,10 +39,10 @@ coreLoop window = do
         RW.destroy window
         exitSuccess
     _                -> do
-      frameTime <- liftIO . restartClock $ frameClock state
+      frameTime <- liftIO . restartClock $ state^.frameClock
       -- debugP . (++ " FPS") . show . (1000000 `div`) $ frameTime
-      screen state frameTime event
-  liftIO . mapM_ (draw window) $ drawables state
+      (state^.screen) frameTime event
+  liftIO . mapM_ (draw window) $ state^.drawables
   liftIO $ RW.display window
   coreLoop window
 

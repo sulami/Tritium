@@ -22,6 +22,7 @@ library
   other-modules:       Paths_tritium
   build-depends:       base >= 4.7 && < 5
                      , mtl
+                     , lens
                      , SFML
   default-language:    Haskell2010
 
@@ -32,6 +33,7 @@ executable tritium
   build-depends:       base
                      , tritium
                      , mtl
+                     , lens
                      , SFML
   default-language:    Haskell2010
 

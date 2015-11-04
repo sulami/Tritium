@@ -1,8 +1,11 @@
+{-# LANGUAGE TemplateHaskell #-}
+
 module Tritium.Import where
 
 import           Control.Monad.State (StateT, liftIO)
 import           System.Exit (exitFailure)
 
+import           Control.Lens (makeLenses)
 import qualified SFML.Graphics.RenderWindow as RW
 import qualified SFML.Graphics.Types as GT
 import           SFML.System.Time (Time)
@@ -21,12 +24,14 @@ draw win (Sprite s) = RW.drawSprite win s Nothing
 draw win (Text t)   = RW.drawText win t Nothing
 
 data GameState = GameState
-  { frameClock :: !Clock
-  , screen     :: !GameScreen
-  , drawables  :: ![Drawable]
+  { _frameClock :: !Clock
+  , _screen     :: !GameScreen
+  , _drawables  :: ![Drawable]
   }
 
 type GameM a = StateT GameState IO a
+
+makeLenses ''GameState
 
 debugP :: String -> GameM ()
 debugP = liftIO . putStrLn . ((++) "[DEBUG] ")
