@@ -5,7 +5,7 @@ module Tritium.UI (
 import           Control.Monad.State (get, liftIO, modify, put)
 import           Data.Maybe (fromJust)
 
-import           Control.Lens ((^.), (<|), set)
+import           Control.Lens ((^.), (|>), set)
 import           SFML.Graphics.Font (FontException (..), fontFromFile)
 import qualified SFML.Graphics.Text as T
 import           SFML.Graphics.Types (Font (..), Text (..))
@@ -32,5 +32,5 @@ newText name size str = do
       liftIO $ do T.setTextStringU txt str
                   T.setTextFont txt font
                   T.setTextCharacterSize txt size
-      modify $ \s -> set drawables ((DText txt) <| s^.drawables) s
+      modify $ \s -> set drawables (s^.drawables |> (DText txt)) s
 
