@@ -17,6 +17,7 @@ cabal-version:       >=1.10
 library
   hs-source-dirs:      src
   exposed-modules:     Tritium.Import
+                     , Tritium.Screen
                      , Tritium.UI
   other-modules:       Paths_tritium
   build-depends:       base >= 4.7 && < 5

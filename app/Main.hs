@@ -12,7 +12,7 @@ import           SFML.Window.VideoMode (VideoMode (..))
 import           SFML.Window.Window (WindowStyle (..))
 
 import           Tritium.Import
-import           Tritium.UI
+import           Tritium.Screen
 
 main :: IO ()
 main = do

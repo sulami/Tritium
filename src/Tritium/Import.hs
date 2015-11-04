@@ -6,11 +6,11 @@ import           SFML.System.Time (Time)
 import           SFML.System.Clock (Clock)
 import           SFML.Window.Event (SFEvent (..))
 
-type GameStep = Time -> Maybe SFEvent -> GameM ()
+type GameScreen = Time -> Maybe SFEvent -> GameM ()
 
 data GameState = GameState
   { frameClock :: !Clock
-  , screen     :: !GameStep
+  , screen     :: !GameScreen
   }
 
 type GameM a = StateT GameState IO a
