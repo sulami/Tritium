@@ -29,6 +29,7 @@ coreLoop :: RenderWindow -> GameM ()
 coreLoop window = do
   liftIO $ RW.clearRenderWindow window COL.black
   event <- liftIO $ RW.pollEvent window
+  state <- get
   case event of
     Just SFEvtClosed -> do
       debugP "Received window close event, terminating"
@@ -37,15 +38,15 @@ coreLoop window = do
         RW.destroy window
         exitSuccess
     _                -> do
-      state <- get
       frameTime <- liftIO . restartClock $ frameClock state
       -- debugP . (++ " FPS") . show . (1000000 `div`) $ frameTime
       screen state frameTime event
+  liftIO . mapM_ (draw window) $ drawables state
   liftIO $ RW.display window
   coreLoop window
 
 defaultGameState :: IO GameState
 defaultGameState = do
   frameClock <- createClock
-  return $ GameState frameClock mainMenu
+  return $ GameState frameClock mainMenu []
 
