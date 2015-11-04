@@ -22,7 +22,7 @@ main = do
       style = [SFTitlebar, SFClose]
       cnxst = Nothing
   window <- RW.createRenderWindow vmode title style cnxst
-  startingState <- defaultGameState
+  startingState <- defaultGameState window
   execStateT (coreLoop window) startingState
   exitSuccess
 
@@ -46,8 +46,8 @@ coreLoop window = do
   liftIO $ RW.display window
   coreLoop window
 
-defaultGameState :: IO GameState
-defaultGameState = do
+defaultGameState :: RenderWindow -> IO GameState
+defaultGameState win = do
   frameClock <- createClock
-  return $ GameState frameClock mainMenu [] True
+  return $ GameState frameClock mainMenu [] True win
 

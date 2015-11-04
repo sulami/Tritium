@@ -28,6 +28,7 @@ data GameState = GameState
   , _screen     :: !GameScreen
   , _drawables  :: ![Drawable]
   , _setup      :: !Bool
+  , _window     :: !GT.RenderWindow
   }
 
 type GameM a = StateT GameState IO a
