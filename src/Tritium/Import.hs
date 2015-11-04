@@ -2,14 +2,15 @@
 
 module Tritium.Import where
 
-import           Control.Monad.State (StateT, liftIO, modify)
+import           Control.Monad.State (StateT, get, liftIO, modify)
 import           System.Exit (exitFailure)
 
-import           Control.Lens (makeLenses, set)
+import           Control.Lens (makeLenses, set, view)
 import qualified SFML.Graphics.RenderWindow as RW
 import qualified SFML.Graphics.Types as GT
-import           SFML.System.Time (Time)
 import           SFML.System.Clock (Clock)
+import           SFML.System.Time (Time)
+import qualified SFML.System.Vector2 as V2
 import           SFML.Window.Event (SFEvent (..))
 
 type GameScreen = Time -> Maybe SFEvent -> GameM ()
@@ -41,6 +42,12 @@ changeScreen gs = modify $
 
 setupDone :: GameM ()
 setupDone = modify $ set setup False
+
+windowSize :: GameM (Word, Word)
+windowSize = do
+  win <- view window <$> get
+  (V2.Vec2u w h) <- liftIO $ RW.getWindowSize win
+  return (w,h)
 
 debugP :: String -> GameM ()
 debugP = liftIO . putStrLn . ((++) "[DEBUG] ")
