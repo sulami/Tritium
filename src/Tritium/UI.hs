@@ -5,7 +5,7 @@ module Tritium.UI (
 import           Control.Monad.State (get, liftIO, modify, put)
 import           Data.Maybe (fromJust)
 
-import           Control.Lens
+import           Control.Lens ((^.), (<|), set)
 import           SFML.Graphics.Font (FontException (..), fontFromFile)
 import qualified SFML.Graphics.Text as T
 import           SFML.Graphics.Types (Font (..), Text (..))
