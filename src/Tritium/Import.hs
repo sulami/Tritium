@@ -14,14 +14,14 @@ import           SFML.Window.Event (SFEvent (..))
 
 type GameScreen = Time -> Maybe SFEvent -> GameM ()
 
-data Drawable = Shape GT.Shape
-              | Sprite GT.Sprite
-              | Text GT.Text
+data Drawable = DShape GT.Shape
+              | DSprite GT.Sprite
+              | DText GT.Text
 
 draw :: GT.RenderWindow -> Drawable -> IO ()
-draw win (Shape s)  = RW.drawShape win s Nothing
-draw win (Sprite s) = RW.drawSprite win s Nothing
-draw win (Text t)   = RW.drawText win t Nothing
+draw win (DShape s)  = RW.drawShape win s Nothing
+draw win (DSprite s) = RW.drawSprite win s Nothing
+draw win (DText t)   = RW.drawText win t Nothing
 
 data GameState = GameState
   { _frameClock :: !Clock

@@ -28,7 +28,7 @@ main = do
 
 coreLoop :: RenderWindow -> GameM ()
 coreLoop window = do
-  liftIO $ RW.clearRenderWindow window COL.black
+  liftIO $ RW.clearRenderWindow window COL.blue
   event <- liftIO $ RW.pollEvent window
   state <- get
   case event of

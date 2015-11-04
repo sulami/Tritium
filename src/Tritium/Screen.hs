@@ -15,6 +15,7 @@ mainMenu :: GameScreen
 mainMenu ft ev = do
   state <- get
   when (state^.setup) $ do
+    newText "roboto" 16 "Toast"
     setupDone
   return ()
 

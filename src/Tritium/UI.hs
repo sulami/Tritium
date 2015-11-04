@@ -1,9 +1,11 @@
 module Tritium.UI (
+  newText
 ) where
 
-import           Control.Monad.State (liftIO)
+import           Control.Monad.State (get, liftIO, modify, put)
 import           Data.Maybe (fromJust)
 
+import           Control.Lens
 import           SFML.Graphics.Font (FontException (..), fontFromFile)
 import qualified SFML.Graphics.Text as T
 import           SFML.Graphics.Types (Font (..), Text (..))
@@ -21,13 +23,14 @@ loadFont name = do
     Right fnt                -> return $ Just fnt
 
 newText :: String -> Int -> String -> GameM ()
-newText name size str = liftIO $ do
-  font <- fromJust <$> loadFont name
-  text <- T.createText
+newText name size str = do
+  font <- liftIO $ fromJust <$> loadFont name
+  text <- liftIO $ T.createText
   case text of
-    Left (T.TextException msg) -> errorP msg
+    Left (T.TextException msg) -> liftIO $ errorP msg
     Right txt                  -> do
-      T.setTextStringU txt str
-      T.setTextFont txt font
-      T.setTextCharacterSize txt size
+      liftIO $ do T.setTextStringU txt str
+                  T.setTextFont txt font
+                  T.setTextCharacterSize txt size
+      modify $ \s -> set drawables ((DText txt) <| s^.drawables) s
 
