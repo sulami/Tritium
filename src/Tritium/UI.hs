@@ -1,5 +1,5 @@
 module Tritium.UI (
-  newText
+  addText, centerText, newText
 ) where
 
 import           Control.Monad.State (get, liftIO, modify, put)
@@ -25,22 +25,26 @@ loadFont name = do
                                    return Nothing
     Right fnt                -> return $ Just fnt
 
-newText :: String -> Int -> String -> GameM ()
+newText :: String -> Int -> String -> GameM (Maybe Text)
 newText name size str = do
   font <- liftIO $ fromJust <$> loadFont name
   text <- liftIO $ T.createText
   case text of
-    Left (T.TextException msg) -> liftIO $ errorP msg
+    Left (T.TextException msg) -> do liftIO $ errorP msg
+                                     return Nothing
     Right txt                  -> do
       liftIO $ do T.setTextString txt str
                   T.setTextFont txt font
                   T.setTextCharacterSize txt size
-      modify $ \s -> set drawables (s^.drawables |> (DText txt)) s
+      return $ Just txt
+
+addText :: Text -> GameM ()
+addText t = modify $ \s -> set drawables (s^.drawables |> (DText t)) s
 
 centerText :: Text -> GameM ()
 centerText txt = do
   windowDimensions <- windowSize
   FloatRect _ _ ow oh <- liftIO $ T.getTextGlobalBounds txt
   let (x,y) = over both ((/ 2) . fromIntegral) windowDimensions
-  liftIO . setPosition txt $ V2.Vec2f (x-ow/2) (y-oh/2)
+  liftIO . setPosition txt $ V2.Vec2f (x - ow/2) (y - oh)
 
