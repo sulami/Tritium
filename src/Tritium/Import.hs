@@ -1,6 +1,7 @@
 module Tritium.Import where
 
 import           Control.Monad.State (StateT, liftIO)
+import           System.Exit (exitFailure)
 
 import qualified SFML.Graphics.RenderWindow as RW
 import qualified SFML.Graphics.Types as GT
@@ -29,4 +30,9 @@ type GameM a = StateT GameState IO a
 
 debugP :: String -> GameM ()
 debugP = liftIO . putStrLn . ((++) "[DEBUG] ")
+
+errorP :: String -> IO ()
+errorP msg = do
+  putStrLn $ "[ERROR] " ++ msg
+  exitFailure
 
