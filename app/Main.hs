@@ -49,5 +49,5 @@ coreLoop window = do
 defaultGameState :: IO GameState
 defaultGameState = do
   frameClock <- createClock
-  return $ GameState frameClock mainMenu []
+  return $ GameState frameClock mainMenu [] True
 

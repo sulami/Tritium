@@ -2,10 +2,10 @@
 
 module Tritium.Import where
 
-import           Control.Monad.State (StateT, liftIO)
+import           Control.Monad.State (StateT, liftIO, modify)
 import           System.Exit (exitFailure)
 
-import           Control.Lens (makeLenses)
+import           Control.Lens (makeLenses, set)
 import qualified SFML.Graphics.RenderWindow as RW
 import qualified SFML.Graphics.Types as GT
 import           SFML.System.Time (Time)
@@ -27,11 +27,19 @@ data GameState = GameState
   { _frameClock :: !Clock
   , _screen     :: !GameScreen
   , _drawables  :: ![Drawable]
+  , _setup      :: !Bool
   }
 
 type GameM a = StateT GameState IO a
 
 makeLenses ''GameState
+
+changeScreen :: GameScreen -> GameM ()
+changeScreen gs = modify $
+  (set drawables []) . (set screen gs) . (set setup True)
+
+setupDone :: GameM ()
+setupDone = modify $ set setup False
 
 debugP :: String -> GameM ()
 debugP = liftIO . putStrLn . ((++) "[DEBUG] ")
