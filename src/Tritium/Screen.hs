@@ -19,5 +19,8 @@ mainMenu ft ev = do
     centerText title
     addText title
     setupDone
-  return ()
+  case ev of
+    Just (SFEvtMouseButtonPressed mbtn mx my) ->
+      debugP $ "Click " ++ show mbtn ++ "@" ++ show mx ++ "," ++ show my
+    _ -> return ()
 

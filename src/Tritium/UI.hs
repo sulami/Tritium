@@ -5,10 +5,11 @@ module Tritium.UI (
 import           Control.Monad.State (get, liftIO, modify, put)
 
 import           Control.Lens ((^.), (|>), both, over, set, view)
-import           SFML.Graphics.Font (FontException (..), fontFromFile)
+import           SFML.SFException (SFException (..))
+import           SFML.Graphics.Font (fontFromFile)
 import           SFML.Graphics.Rect (FloatRect (..))
 import qualified SFML.Graphics.Text as T
-import           SFML.Graphics.Transformable (Transformable, setPosition)
+import           SFML.Graphics.SFTransformable (setPosition)
 import           SFML.Graphics.Types (Font (..), Text (..))
 import qualified SFML.System.Vector2 as V2
 
@@ -20,18 +21,18 @@ loadFont name = do
   path <- getDataFileName ("res/" ++ name ++ ".ttf")
   font <- fontFromFile path
   case font of
-    Left (FontException msg) -> do errorP msg
-                                   return Nothing
-    Right fnt                -> return $ Just fnt
+    Left (SFException msg) -> do errorP msg
+                                 return Nothing
+    Right fnt              -> return $ Just fnt
 
 newText :: String -> Int -> String -> GameM (Maybe Text)
 newText name size str = do
   Just font <- liftIO $ loadFont name
   text <- liftIO $ T.createText
   case text of
-    Left (T.TextException msg) -> do liftIO $ errorP msg
-                                     return Nothing
-    Right txt                  -> do
+    Left (SFException msg) -> do liftIO $ errorP msg
+                                 return Nothing
+    Right txt              -> do
       liftIO $ do T.setTextString txt str
                   T.setTextFont txt font
                   T.setTextCharacterSize txt size
