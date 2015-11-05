@@ -16,6 +16,7 @@ import qualified SFML.System.Vector2 as V2
 import           Paths_tritium (getDataFileName)
 import           Tritium.Import
 
+-- | Load a font from the resource directory.
 loadFont :: String -> IO (Maybe Font)
 loadFont name = do
   path <- getDataFileName ("res/" ++ name ++ ".ttf")
@@ -25,6 +26,7 @@ loadFont name = do
                                  return Nothing
     Right fnt              -> return $ Just fnt
 
+-- | Create a new text object using the specified font, size and content.
 newText :: String -> Int -> String -> GameM (Maybe Text)
 newText name size str = do
   Just font <- liftIO $ loadFont name
@@ -38,14 +40,17 @@ newText name size str = do
                   T.setTextCharacterSize txt size
       return $ Just txt
 
+-- | Add a text to the drawable list.
 addText :: Text -> GameM ()
 addText t = modify $ \s -> set drawables (s^.drawables |> (DText t)) s
 
+-- | Position a text at the specified position, anchored at the center.
 positionText :: Text -> (Float, Float) -> GameM ()
 positionText txt (x,y) = do
   FloatRect _ _ ow oh <- liftIO $ T.getTextGlobalBounds txt
   liftIO . setPosition txt $ V2.Vec2f (x - ow/2) (y - oh/2)
 
+-- | Center a text in the x-dimension, preserving the y-coordinate.
 centerTextX :: Text -> GameM ()
 centerTextX txt = do
   (windowWidth, _) <- windowSize
@@ -53,6 +58,7 @@ centerTextX txt = do
   V2.Vec2f _ objY <- liftIO $ getPosition txt
   positionText txt (windowCenter, objY)
 
+-- | Center a text on the screen.
 centerText :: Text -> GameM ()
 centerText txt = do
   windowDimensions <- windowSize

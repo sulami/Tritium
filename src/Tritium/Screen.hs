@@ -11,6 +11,7 @@ import           SFML.Window.Event (SFEvent (..))
 import           Tritium.Import
 import           Tritium.UI
 
+-- | The main menu.
 mainMenu :: GameScreen
 mainMenu ft ev = do
   state <- get

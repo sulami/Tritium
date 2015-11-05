@@ -15,6 +15,7 @@ import           SFML.Window.Window (WindowStyle (..))
 import           Tritium.Import
 import           Tritium.Screen
 
+-- | Main entry point. Sets up a window and game and then enters the core loop.
 main :: IO ()
 main = do
   let vmode = VideoMode 800 600 8
@@ -26,6 +27,8 @@ main = do
   execStateT (coreLoop window) startingState
   exitSuccess
 
+-- | The main core loop that clears and redraws the window, calls the current
+-- screen function and passes the neccessary data.
 coreLoop :: RenderWindow -> GameM ()
 coreLoop window = do
   liftIO $ RW.clearRenderWindow window COL.blue
@@ -46,6 +49,7 @@ coreLoop window = do
   liftIO $ RW.display window
   coreLoop window
 
+-- | The initial gamestate to use when starting.
 defaultGameState :: RenderWindow -> IO GameState
 defaultGameState win = do
   frameClock <- createClock
