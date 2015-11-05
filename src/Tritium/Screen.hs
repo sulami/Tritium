@@ -15,8 +15,8 @@ mainMenu :: GameScreen
 mainMenu ft ev = do
   state <- get
   when (state^.setup) $ do
-    Just title <- newText "MonkirtaPursuit" 46 "Tritium"
-    centerText title
+    Just title <- newText "MonkirtaPursuit" 90 "Tritium"
+    centerTextX title
     addText title
     setupDone
   case ev of
